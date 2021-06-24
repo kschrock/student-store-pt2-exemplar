@@ -18,7 +18,7 @@ app.use(cors())
 app.use(express.json())
 // log requests info
 app.use(morgan("tiny"))
-
+// for every request, check if a token exists
 // extract user from jwt token sent in authorization header
 // attach credentials to res.locals.user
 app.use(security.extractUserFromJwt)

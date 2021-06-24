@@ -8,6 +8,7 @@ const { UnauthorizedError } = require("../utils/errors")
 
 const jwtFrom = ({ headers }) => {
   if (headers?.authorization) {
+    // authorization: "Bearer asasdlkfwoifjwq;"
     const [scheme, token] = headers.authorization.split(" ")
     if (scheme.trim() === "Bearer") {
       return token
@@ -48,7 +49,9 @@ const extractUserFromJwt = (req, res, next) => {
 const requireAuthenticatedUser = (req, res, next) => {
   try {
     const { user } = res.locals
-    if (!user?.email) throw new UnauthorizedError()
+    if (!user?.email) {
+       throw new UnauthorizedError()
+    }
     return next()
   } catch (error) {
     return next(error)

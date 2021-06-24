@@ -5,12 +5,17 @@ const { createUserJwt } = require("../utils/tokens")
 const security = require("../middleware/security")
 const router = express.Router()
 
+/**
+ * This first runs the requireAuthenticatedUser function to verify user
+ * Then runs the route handler logic below
+ */
 router.get("/me", security.requireAuthenticatedUser, async (req, res, next) => {
   try {
     const { email } = res.locals.user
     const user = await User.fetchUserByEmail(email)
+    const publicUser = User.makePublicUser(user)
     const orders = await Order.listOrdersForUser(user)
-    return res.status(200).json({ user, orders })
+    return res.status(200).json({ publicUser, orders })
   } catch (err) {
     next(err)
   }
