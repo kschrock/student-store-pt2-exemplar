@@ -4,10 +4,12 @@ class ApiClient {
     constructor(remoteHostURL){
       this.remoteHostURL = remoteHostURL  
       this.token = null
+      this.tokenName = "student_store_token"
     }
 
     setToken(token){
         this.token = token
+        localStorage.setItem(this.tokenName, token)
     }
 
     async request({ endpoint, method = `GET`, data = {} }) {
@@ -31,6 +33,7 @@ class ApiClient {
         }
     }
 
+
     async loginUser(credentials){
         return await this.request({ endpoint: `auth/login`, method: `POST`, data : credentials})
     }
@@ -41,6 +44,15 @@ class ApiClient {
 
     async usercreateOrder(cart){
         return await this.request({ endpoint: `orders/`, method: `POST`, data : cart})
+    }
+
+    async fetchUserFromToken(){
+        return await this.request({ endpoint: `auth/me`, method: `GET`})
+    }
+
+    async logoutUser(){
+        this.setToken(null)
+        localStorage.getItem(this.tokenName, "")
     }
 
     async getProducts(){

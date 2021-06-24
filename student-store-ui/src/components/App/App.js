@@ -42,53 +42,50 @@ export default function App() {
         return data.order
     }  
     setIsCheckingOut(false)
-    // try {
-    //   const res = await axios.post("http://localhost:3001/orders", { order: cart })
-    //   if (res?.data?.order) {
-    //     setOrders((o) => [...res.data.order, ...o])
-    //     setIsCheckingOut(false)
-    //     setCart({})
-    //     return res.data.order
-    //   } else {
-    //     setError("Error checking out.")
-    //   }
-    // } catch (err) {
-    //   console.log(err)
-    //   const message = err?.response?.data?.error?.message
-    //   setError(message ?? String(err))
-    // } finally {
-    //   setIsCheckingOut(false)
-    // }
+  
   }
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await apiClient.fetchUserFromToken()
+     // console.log(data)
+      if(data) setUser(data.publicUser)
+      if(error) setError(error)
+    }
+
+    const token = localStorage.getItem("student_store_token")
+   // console.log("here:,", token)
+    if(token){
+    //  console.log("made it here")
+      apiClient.setToken(token)
+      fetchUser()
+    }
+  }, [])
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsFetching(true)
-      const { data, error} = await apiClient.getProducts()
+      const { data, error } = await apiClient.getProducts()
       if(error) setError((e) => ({ ...e, products: error }))
       //console.log(data)
       if(data?.products){
         setProducts(data.products)
     }  
     setIsFetching(false)
-      // try {
-      //   const res = await axios.get("http://localhost:3001/store")
-      //   if (res?.data?.products) {
-      //     setProducts(res.data.products)
-      //   } else {
-      //     setError("Error fetching products.")
-      //   }
-      // } catch (err) {
-      //   console.log(err)
-      //   const message = err?.response?.data?.error?.message
-      //   setError(message ?? String(err))
-      // } finally {
-      //   setIsFetching(false)
-      // }
+
     }
 
     fetchProducts()
   }, [])
+
+
+  const handleLogout = async () => {
+    console.log("Here")
+    await apiClient.logoutUser()
+    setUser({})
+    setCart({})
+    setError(null)
+  }
 
   return (
     <div className="App">
@@ -112,7 +109,7 @@ export default function App() {
               />
             }
           />
-          <Route path="/login" element={<Login user={user} setUser={setUser} />} />
+          <Route path="/login" element={<Login user={user} setUser={setUser}/>} />
           <Route path="/signup" element={<Signup user={user} setUser={setUser} />} />
           <Route
             path="/orders"

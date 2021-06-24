@@ -12,6 +12,7 @@ export default function Login({ user, setUser }) {
     password: "",
   })
 
+
   useEffect(() => {
     // if user is already logged in,
     // redirect them to the home page
@@ -56,6 +57,7 @@ export default function Login({ user, setUser }) {
     // } finally {
     //   setIsProcessing(false)
     // }
+
   }
 
   return (

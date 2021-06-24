@@ -9,6 +9,7 @@ export default function SubNavbar({
   setActiveCategory,
   handleOnSearchInputChange,
   searchInputValue,
+  
 }) {
   const [open, setOpen] = useState(true)
 
@@ -41,6 +42,7 @@ export default function SubNavbar({
                   <img src={person} alt="avatar" />
                   {user.email}
                 </Link>
+                
               ) : (
                 <Link to="/login">
                   <img src={person} alt="avatar" />
